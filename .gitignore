@@ -1,0 +1,18 @@
+
+\.vscode/
+
+obj/
+
+Temp/
+
+Assets/TextMesh Pro/
+
+Assets/TextMesh Pro\.meta
+
+Library/
+
+Assets/Scripts\.meta
+
+Assembly-CSharp\.csproj
+
+Crabs\.sln
