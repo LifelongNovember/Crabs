@@ -7,6 +7,6 @@ public class BoutonJouer : MonoBehaviour
 {
     public void onPressed()
     {
-        SceneManager.LoadScene("Lobby");
+        SceneManager.LoadScene("Jeu");
     }
 }
