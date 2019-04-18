@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerMotor))]
-    public class PlayeController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     [SerializeField]
     private float speed = 3f;
     private PlayerMotor motor;
-    
+    public int playerId;
+    public Transform spawnPosition;
+
+
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
+        playerId = ((int) netId.Value) % 2;
+        Transform mesh = transform.Find("Mesh");
+        mesh.GetChild(playerId).gameObject.SetActive(true);
+        playerId++;
     }
 
     void Update()
