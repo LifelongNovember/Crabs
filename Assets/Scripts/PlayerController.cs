@@ -5,7 +5,8 @@ using UnityEngine.Networking;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField]
-    private float speed = 3f;
+    public float speed = 3f;
+    public float moveForce = 30.0f;
     private PlayerMotor motor;
     public int playerId;
     public Transform spawnPosition;
@@ -18,10 +19,13 @@ public class PlayerController : NetworkBehaviour
         Transform mesh = transform.Find("Mesh");
         mesh.GetChild(playerId).gameObject.SetActive(true);
         playerId++;
+        GetComponent<Rigidbody>().freezeRotation = true;
+        GetComponent<Rigidbody>().drag = 4.0f;
     }
 
     void Update()
     {
+        
         float xMovement = Input.GetAxisRaw("Horizontal");
         float zMovement = Input.GetAxisRaw("Vertical");
 
