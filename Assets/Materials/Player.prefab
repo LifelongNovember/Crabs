@@ -175,8 +175,8 @@ MonoBehaviour:
   speed: 3
   moveForce: 30
   distanceToTake: 2.5
+  distanceToDrop: 1.5
   playerId: 0
-  spawnPosition: {fileID: 0}
   isX: 0
 --- !u!114 &6256863368589922416
 MonoBehaviour:
@@ -421,12 +421,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7258181884387336728, guid: b12e9c65323c4e9cc91f7a1eec3fb1f6,
+    - target: {fileID: 6805457924027242053, guid: b12e9c65323c4e9cc91f7a1eec3fb1f6,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7861aa4755dfbd190b9dec5074c4426c, type: 2}
-    - target: {fileID: 6805457924027242053, guid: b12e9c65323c4e9cc91f7a1eec3fb1f6,
+    - target: {fileID: 7258181884387336728, guid: b12e9c65323c4e9cc91f7a1eec3fb1f6,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

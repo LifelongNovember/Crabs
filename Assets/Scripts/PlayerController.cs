@@ -8,11 +8,12 @@ public class PlayerController : NetworkBehaviour
     public float speed = 3f;
     public float moveForce = 30.0f;
     public float distanceToTake;
+    public float distanceToDrop;
     private PlayerMotor motor;
     public int playerId;
-    public Transform spawnPosition;
     public bool isX = false;
     private bool isTakingObject = false;
+
 
 
     void Start()
@@ -54,32 +55,55 @@ public class PlayerController : NetworkBehaviour
 
     [Command]
     void CmdRequestTakeObject(bool _isX) {
-        GameObject obj;
+        Transform obj;
+        GameObject pool = _isX ? GameObject.Find("/X PickUps") : GameObject.Find("/O PickUps");
         for(int i = 0; i < 5; i++) {
-            obj = _isX ? GameObject.Find("/X PickUps/" + i) : GameObject.Find("/O PickUps/" + i); 
-            if(Vector3.Distance(obj.transform.position, transform.position) < distanceToTake) {
-                RpcTakeObject(i, _isX);
+            if(pool.transform.FindChild("" + i) != null) {
+                obj = pool.transform.FindChild("" + i); 
+                if(Vector3.Distance(obj.position, transform.position) < distanceToTake) {
+                    RpcTakeObject(i, _isX);
+                    break;
+                }
             }
         }
     }
 
     [Command]
     void CmdDropObject() {
-        RpcDropObject();
+        bool hasDropped = false;
+        GameObject container;
+        for(int i = 0; i < 9; i++) {
+            container = GameObject.Find("/Containers/" + i);
+            if(Vector3.Distance(container.transform.position, transform.FindChild("ObjectInHand").position) < distanceToDrop && container.transform.childCount == 0) {
+                RpcPlaceObjectInContainer(i, isX);
+                hasDropped = true;
+            }
+        }
+        if(!hasDropped) RpcDropObject();
     }
 
     [ClientRpc]
     void RpcTakeObject(int _i, bool _isX) {
-        isTakingObject = true;
         GameObject obj = _isX ? GameObject.Find("/X PickUps/" + _i) : GameObject.Find("/O PickUps/" + _i); 
         obj.transform.parent = transform.FindChild("ObjectInHand");
         obj.transform.localPosition = new Vector3(0,0,0);
         obj.transform.localRotation = new Quaternion(0,0,0,0);
+        isTakingObject = true;
     }
 
     [ClientRpc]
     void RpcDropObject() {
-        isTakingObject = false;
         transform.FindChild("ObjectInHand").GetChild(0).parent = isX ? GameObject.Find("/X PickUps").transform : GameObject.Find("/O PickUps").transform; 
+        isTakingObject = false;
+    }
+
+    [ClientRpc]
+    void RpcPlaceObjectInContainer(int _i, bool _isX) {
+        Transform obj = transform.FindChild("ObjectInHand").GetChild(0); 
+        obj.parent = GameObject.Find("/Containers/" + _i).transform;
+        obj.localPosition = new Vector3(0,0,0);
+        obj.localRotation = new Quaternion(0,0,0,0);
+        obj.localScale = new Vector3 (1.0f/1.5f, 1, 1);
+        isTakingObject = false;        
     }
 }

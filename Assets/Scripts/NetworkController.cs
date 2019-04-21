@@ -17,7 +17,7 @@ public class NetworkController : NetworkManager
             playerId  = stream.value;
         }
 
-        GameObject player = Instantiate(playerPrefab, playerPrefab.GetComponent<PlayerController>().spawnPosition.position, Quaternion.identity) as GameObject;
+        GameObject player = Instantiate(playerPrefab) as GameObject;
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
     }
 }
