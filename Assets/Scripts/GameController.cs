@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     public int[,] grid;
     public GameObject XWinScreen;
     public GameObject OWinScreen;
+    public GameObject TieWinScreen;
 
     void Start() {
         gridModel = new int[3,3] {
@@ -65,10 +66,12 @@ public class GameController : MonoBehaviour
         int resultC = 0;
         int resultD1 = 0;
         int resultD2 = 0;
+        bool isTie = true;
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
                 resultL += grid[i,j];
                 resultC += grid[j,i];
+                if(grid[i,j] == 0) isTie = false;
             }
             if(resultL == 3 || resultC == 3) {
                 isOver(true);
@@ -91,13 +94,20 @@ public class GameController : MonoBehaviour
             isOver(false);
             return true;
         }
+        if(isTie) {
+            isTieOver();
+            return true;
+        }
         return false;
     }
 
     public void isOver(bool isX) {
-        Debug.Log("it's over !");
         if(isX) XWinScreen.SetActive(true);
         else OWinScreen.SetActive(true);
+    }
+
+    public void isTieOver() {
+        TieWinScreen.SetActive(true);
     }
 
     
