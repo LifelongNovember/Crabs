@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField]
-    public float speed = 3f;
     public float moveForce = 30.0f;
     public float distanceToTake;
     public float distanceToDrop;
@@ -13,11 +12,13 @@ public class PlayerController : NetworkBehaviour
     public int playerId;
     public bool isX = false;
     private bool isTakingObject = false;
+    public GameController gc;
 
 
 
     void Start()
     {
+        gc = GameObject.Find("/GameManager").GetComponent<GameController>();
         motor = GetComponent<PlayerMotor>();
         playerId = ((int) netId.Value) % 2;
         if(playerId == 0) isX = true;
@@ -29,24 +30,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     void Update()
-    {
-        
-        float xMovement = Input.GetAxisRaw("Horizontal");
-        float zMovement = Input.GetAxisRaw("Vertical");
-
-        Vector3 horizontalRotation = transform.right * xMovement;
-        Vector3 verticalRotation = transform.forward * zMovement;
-
-        // Vecteur mouvement final
-        Vector3 velocity = (horizontalRotation + verticalRotation).normalized * speed;
-        //motor.Move(velocity);
-        if (Input.GetButton("Horizontal")||Input.GetButton("Vertical")) 
-        {
-            Vector3 newForward = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-            if (newForward!=Vector3.zero) transform.forward = newForward;
-            transform.Translate(Vector3.forward * Time.deltaTime);
-        }
-
+    {      
         if(Input.GetMouseButtonDown(0)) {
             if(!isTakingObject) CmdRequestTakeObject(isX);
             else CmdDropObject();
@@ -101,9 +85,22 @@ public class PlayerController : NetworkBehaviour
     void RpcPlaceObjectInContainer(int _i, bool _isX) {
         Transform obj = transform.FindChild("ObjectInHand").GetChild(0); 
         obj.parent = GameObject.Find("/Containers/" + _i).transform;
+        gc.insert(_isX, _i);
         obj.localPosition = new Vector3(0,0,0);
         obj.localRotation = new Quaternion(0,0,0,0);
         obj.localScale = new Vector3 (1.0f/1.5f, 1, 1);
-        isTakingObject = false;        
+        isTakingObject = false;
+        if(gc.checkIfOver())  {
+            motor.enabled = false;
+            Invoke("backToTitle", 5);
+        }
+        
+    }
+
+    void backToTitle() {
+        if(isClient) NetworkManager.singleton.StopHost();
+        else NetworkManager.singleton.StopClient();
+        Destroy(GameObject.Find("LobbyManager (1)"));
+        SceneManager.LoadScene("Titre");
     }
 }
