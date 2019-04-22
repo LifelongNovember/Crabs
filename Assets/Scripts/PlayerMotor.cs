@@ -7,9 +7,11 @@ public class PlayerMotor : MonoBehaviour
     public float speed = 3f;
     private Vector3 velocity = Vector3.zero;
     private Rigidbody rb;
+    public GameController gc;
 
     void Start() 
     {
+        gc = GameObject.Find("/GameManager").GetComponent<GameController>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -21,7 +23,7 @@ public class PlayerMotor : MonoBehaviour
     // Appliqué à chaque itération physique
     void FixedUpdate()
     {
-        PerformMovement();
+        if(gc.stillPlaying) PerformMovement();
     }
 
     // En fonction de la velocité

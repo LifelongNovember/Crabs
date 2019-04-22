@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public GameObject XWinScreen;
     public GameObject OWinScreen;
     public GameObject TieWinScreen;
+    public bool stillPlaying;
 
     void Start() {
         gridModel = new int[3,3] {
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
             {0, 0, 0},
             {0, 0, 0}
         };
+        stillPlaying = true;
     }
 
     public void insert(bool isX, int position) {
@@ -102,11 +104,13 @@ public class GameController : MonoBehaviour
     }
 
     public void isOver(bool isX) {
+        stillPlaying = false;
         if(isX) XWinScreen.SetActive(true);
         else OWinScreen.SetActive(true);
     }
 
     public void isTieOver() {
+        stillPlaying = false;
         TieWinScreen.SetActive(true);
     }
 

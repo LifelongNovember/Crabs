@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/__DELETED_GUID_Trash/6f3b1e88442dcae3db70062230923d96
+    path: 
     guid: 6f3b1e88442dcae3db70062230923d96
   - enabled: 1
     path: Assets/Scenes/Titre.unity
@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: be81911c4962fdbeea4af092c917f4f4
+  - enabled: 1
+    path: Assets/Scenes/Commandes.unity
+    guid: a192922dd27451aa19d05ba55c44a1dc
   m_configObjects: {}
